@@ -1,0 +1,6 @@
+HANGMAN RULES
+=============
+- Guess the hidden word letter by letter
+- You have 6 lives (wrong guesses)
+- You win if you guess all letters before 6 wrongs!
+- Have fun!
