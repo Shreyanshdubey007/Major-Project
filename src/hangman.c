@@ -18,7 +18,7 @@ const char *wordList[] = {
 };
 const int TOTAL_WORDS = 20;
 
-// 7 Stages of Hangman (0 to 6 wrong guesses)
+// Print hangman stages
 void printHangman() {
     printf("\n");
     printf("   ======\n");
@@ -63,18 +63,29 @@ int isLetterInWord(char ch) {
     return found;
 }
 
+// FIXED WIN CHECK - Now works 100%
+int isWordGuessed() {
+    for (int i = 0; word[i]; i++) {
+        if (guessed[i] == 0)        // any letter still hidden?
+            return 0;
+    }
+    return 1;  // all letters revealed → WIN!
+}
+
 int isGameOver() {
-    // Win
-    if (strchr(guessed, 0) == NULL) {
-        printf("\nCONGRATULATIONS! YOU WIN!\n");
-        printf("   The word was: %s\n", word);
+    // WIN - CORRECTED!
+    if (isWordGuessed()) {
+        printHangman();
+        printWord();
+        printf("\n   CONGRATULATIONS! YOU WIN!\n");
+        printf("   The word was: %s\n\n", word);
         return 1;
     }
-    // Lose
+    // LOSE
     if (wrongGuesses >= MAX_GUESSES) {
         printHangman();
-        printf("\nGAME OVER! YOU LOST!\n");
-        printf("   The word was: %s\n", word);
+        printf("\n   GAME OVER! YOU LOST!\n");
+        printf("   The word was: %s\n\n", word);
         return 1;
     }
     return 0;
@@ -87,8 +98,8 @@ void playHangman() {
     wrongGuesses = 0;
     memset(usedLetters, 0, sizeof(usedLetters));
 
-    printf("\nWELCOME TO HANGMAN GAME!\n");
-    printf("Guess the word! You have %d lives.\n\n", MAX_GUESSES);
+    printf("\n   WELCOME TO HANGMAN GAME!\n");
+    printf("   Guess the word! You have %d lives.\n\n", MAX_GUESSES);
 
     while (!isGameOver()) {
         printHangman();
@@ -98,7 +109,7 @@ void playHangman() {
         printf("\n   Enter a letter: ");
         
         char ch = getchar();
-        while (getchar() != '\n'); // clear buffer
+        while (getchar() != '\n');  // clear input buffer
         ch = toupper(ch);
 
         if (!isalpha(ch)) {
